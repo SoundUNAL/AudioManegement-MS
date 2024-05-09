@@ -1,0 +1,23 @@
+version: '3.8'
+name : audiomanegement
+
+services:
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: sound_audiomanegement_db
+    ports:
+      - "5432:5432"
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      SECRET_KEY_BASE : 800893536f60f99b35f08e11155cadef46de7c48bb9ebe67ef88c8952ecfeb2c541b1263700181ade9e2b7056f3e65df8258c158fad8eb016e3ec995db85b30c
+    depends_on:
+      - db
