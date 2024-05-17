@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   # API
   # Songs request
   resources :songs
+  get '/show_by_title', to: 'songs#show_by_title'
   # Albums request
   resources :albums
   # Playlists request
