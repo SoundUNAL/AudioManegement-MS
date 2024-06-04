@@ -22,17 +22,19 @@ class SongsController < ApplicationController
 		song.as_json.merge(image_url: image_url)
 	end
 
-	 # Get song by title
+	# Get song by title
   def show_by_title
-    @song = Song.find_by(title: params[:title])
-		image_url = url_for(@song.image) if @song.image.attached?
+    @songs = Song.where("title LIKE ?", "%#{params[:title]}%")
 
-    if @song
-			# Devolver JSON
-      render json: @song.as_json.merge(image_url: image_url)
-    else
-      render json: { error: "Song not found" }, status: :not_found
-    end
+		if @songs.any?
+			songs_with_images = @songs.map do |song|
+				image_url = url_for(song.image) if song.image.attached?
+				song.as_json.merge(image_url: image_url)
+			end
+			render json: songs_with_images
+		else
+			render json: { error: "Songs not found" }, status: :not_found
+		end
   end
 
 	# Post a new song
